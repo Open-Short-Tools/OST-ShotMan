@@ -9,6 +9,7 @@ from tkinter import ttk
 import re
 import shutil # Import shutil for file operations
 import sys # Import sys to detect PyInstaller environment
+from PIL import Image, ImageTk
 
 # Import your core functions. blender_utils is no longer imported.
 from core import list_shots, create_new_shot, duplicate_shot, delete_shot, create_new_shot_from_template
@@ -86,6 +87,18 @@ class ShotManagerGUI:
         self.root.title("ShotMan GUI")
         self.root.geometry("900x650") # Slightly increased height for status bar
         self.root.configure(bg="#2b2b2b")
+
+        icon_path = os.path.join(BASE_RESOURCE_PATH, "shotman.ico")
+        try:
+            if os.path.exists(icon_path):
+                icon_image = Image.open(icon_path)
+                self.photo_image = ImageTk.PhotoImage(icon_image)
+                self.root.iconphoto(True, self.photo_image)
+            else:
+                print(f"Warning: .ico icon file not found at '{icon_path}'. Window will use default icon.")
+        except Exception as e:
+            print(f"Warning: Could not load .ico icon from '{icon_path}'. Error: {e}. Window will use default icon.")
+            print("Please ensure Pillow is installed (pip install Pillow) and 'icon.ico' is a valid image file.")
 
         # Apply style
         self.style = ttk.Style()
